@@ -1,4 +1,4 @@
-package com.zahid.inventory_sales_api;
+package com.zahid.inventoryapi;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

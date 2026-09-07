@@ -1,4 +1,4 @@
-package com.zahid.inventory_sales_api;
+package com.zahid.inventoryapi;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
