@@ -10,8 +10,9 @@ public record ProductResponse(
         BigDecimal price,
         Integer stock,
         Integer minimumStock,
-        Boolean active
-) {
+        Boolean active,
+        Long categoryId,
+        String categoryName) {
 
     public static ProductResponse from(Product product) {
         return new ProductResponse(
@@ -22,7 +23,8 @@ public record ProductResponse(
                 product.getPrice(),
                 product.getStock(),
                 product.getMinimumStock(),
-                product.getActive()
-        );
+                product.getActive(),
+                product.getCategory().getId(),
+                product.getCategory().getName());
     }
 }

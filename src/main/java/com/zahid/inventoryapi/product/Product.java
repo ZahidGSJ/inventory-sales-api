@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import com.zahid.inventoryapi.category.Category;;
 
 @Entity
 @Table(name = "products")
@@ -35,7 +36,10 @@ public class Product {
     @Column(nullable = false)
     private Integer minimumStock;
 
-    // La relación con Category la agregaremos cuando construyamos esa entidad.
     @Column(nullable = false)
     private Boolean active;
+
+    @ManyToOne
+    @JoinColumn(name = "category_id", nullable = false)
+    private Category category;
 }

@@ -8,13 +8,15 @@ import jakarta.validation.constraints.PositiveOrZero;
 import java.math.BigDecimal;
 
 public record ProductUpdateRequest(
-        @NotBlank String name,
+                @NotBlank String name,
 
-        String description,
+                String description,
 
-        @NotNull @Positive BigDecimal price,
+                @NotNull @Positive BigDecimal price,
 
-        @NotNull @PositiveOrZero Integer minimumStock,
+                @NotNull @PositiveOrZero Integer minimumStock,
 
-        @NotNull Boolean active) {
+                @NotNull Boolean active,
+
+                @NotNull Long categoryId) {
 }
