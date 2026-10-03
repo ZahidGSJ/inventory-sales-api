@@ -3,6 +3,8 @@ package com.zahid.inventoryapi.exception;
 import com.zahid.inventoryapi.category.CategoryNotFoundException;
 import com.zahid.inventoryapi.product.DuplicateSkuException;
 import com.zahid.inventoryapi.category.DuplicateCategoryNameException;
+import com.zahid.inventoryapi.inventory.InsufficientStockException;
+import com.zahid.inventoryapi.inventory.InvalidMovementQuantityException;
 import com.zahid.inventoryapi.product.ProductNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
@@ -12,7 +14,6 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
-
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -94,7 +95,30 @@ public class GlobalExceptionHandler {
         }
 
         @ExceptionHandler(DuplicateCategoryNameException.class)
-        public ResponseEntity<ErrorResponse> handleDuplicateCategoryName(DuplicateCategoryNameException ex, HttpServletRequest request) {
+        public ResponseEntity<ErrorResponse> handleDuplicateCategoryName(DuplicateCategoryNameException ex,
+                        HttpServletRequest request) {
+                ErrorResponse error = ErrorResponse.of(
+                                HttpStatus.CONFLICT.value(),
+                                HttpStatus.CONFLICT.getReasonPhrase(),
+                                ex.getMessage(),
+                                request.getRequestURI());
+                return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
+        }
+
+        @ExceptionHandler(InvalidMovementQuantityException.class)
+        public ResponseEntity<ErrorResponse> handleInvalidMovementQuantity(
+                        InvalidMovementQuantityException ex, HttpServletRequest request) {
+                ErrorResponse error = ErrorResponse.of(
+                                HttpStatus.BAD_REQUEST.value(),
+                                HttpStatus.BAD_REQUEST.getReasonPhrase(),
+                                ex.getMessage(),
+                                request.getRequestURI());
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+        }
+
+        @ExceptionHandler(InsufficientStockException.class)
+        public ResponseEntity<ErrorResponse> handleInsufficientStock(
+                        InsufficientStockException ex, HttpServletRequest request) {
                 ErrorResponse error = ErrorResponse.of(
                                 HttpStatus.CONFLICT.value(),
                                 HttpStatus.CONFLICT.getReasonPhrase(),
