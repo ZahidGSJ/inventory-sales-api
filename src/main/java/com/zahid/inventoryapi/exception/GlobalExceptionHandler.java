@@ -2,6 +2,7 @@ package com.zahid.inventoryapi.exception;
 
 import com.zahid.inventoryapi.category.CategoryNotFoundException;
 import com.zahid.inventoryapi.product.DuplicateSkuException;
+import com.zahid.inventoryapi.product.InactiveProductException;
 import com.zahid.inventoryapi.category.DuplicateCategoryNameException;
 import com.zahid.inventoryapi.inventory.InsufficientStockException;
 import com.zahid.inventoryapi.inventory.InvalidMovementQuantityException;
@@ -119,6 +120,17 @@ public class GlobalExceptionHandler {
         @ExceptionHandler(InsufficientStockException.class)
         public ResponseEntity<ErrorResponse> handleInsufficientStock(
                         InsufficientStockException ex, HttpServletRequest request) {
+                ErrorResponse error = ErrorResponse.of(
+                                HttpStatus.CONFLICT.value(),
+                                HttpStatus.CONFLICT.getReasonPhrase(),
+                                ex.getMessage(),
+                                request.getRequestURI());
+                return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
+        }
+
+        @ExceptionHandler(InactiveProductException.class)
+        public ResponseEntity<ErrorResponse> handleInactiveProduct(
+                        InactiveProductException ex, HttpServletRequest request) {
                 ErrorResponse error = ErrorResponse.of(
                                 HttpStatus.CONFLICT.value(),
                                 HttpStatus.CONFLICT.getReasonPhrase(),
