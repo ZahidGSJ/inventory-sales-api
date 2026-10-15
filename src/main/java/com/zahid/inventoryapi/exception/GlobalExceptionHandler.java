@@ -7,6 +7,8 @@ import com.zahid.inventoryapi.category.DuplicateCategoryNameException;
 import com.zahid.inventoryapi.inventory.InsufficientStockException;
 import com.zahid.inventoryapi.inventory.InvalidMovementQuantityException;
 import com.zahid.inventoryapi.product.ProductNotFoundException;
+import com.zahid.inventoryapi.sale.SaleNotFoundException;
+
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -137,5 +139,16 @@ public class GlobalExceptionHandler {
                                 ex.getMessage(),
                                 request.getRequestURI());
                 return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
+        }
+
+        @ExceptionHandler(SaleNotFoundException.class)
+        public ResponseEntity<ErrorResponse> handleSaleNotFound(SaleNotFoundException ex,
+                        HttpServletRequest request) {
+                ErrorResponse error = ErrorResponse.of(
+                                HttpStatus.NOT_FOUND.value(),
+                                HttpStatus.NOT_FOUND.getReasonPhrase(),
+                                ex.getMessage(),
+                                request.getRequestURI());
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
         }
 }

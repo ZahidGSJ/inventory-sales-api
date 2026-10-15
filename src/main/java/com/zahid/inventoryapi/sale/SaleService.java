@@ -15,7 +15,7 @@ import com.zahid.inventoryapi.product.InactiveProductException;
 import com.zahid.inventoryapi.product.Product;
 import com.zahid.inventoryapi.product.ProductNotFoundException;
 import com.zahid.inventoryapi.product.ProductRepository;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class SaleService {
@@ -86,5 +86,20 @@ public class SaleService {
         Sale savedSale = saleRepository.save(sale);
 
         return SaleResponse.from(savedSale);
+    }
+
+    @Transactional(readOnly = true)
+    public SaleResponse getSaleById(Long id) {
+        Sale sale = saleRepository.findById(id)
+                .orElseThrow(() -> new SaleNotFoundException("Venta no encontrada con id: " + id));
+        return SaleResponse.from(sale);
+    }
+
+    @Transactional(readOnly = true)
+    public List<SaleResponse> getAllSales() {
+        return saleRepository.findAllWithItems()
+                .stream()
+                .map(SaleResponse::from)
+                .toList();
     }
 }

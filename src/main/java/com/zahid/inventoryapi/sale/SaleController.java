@@ -3,8 +3,11 @@ package com.zahid.inventoryapi.sale;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import jakarta.validation.Valid;
+import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -22,5 +25,15 @@ public class SaleController {
     public ResponseEntity<SaleResponse> createSale(@Valid @RequestBody SaleRequest request) {
         SaleResponse response = saleService.createSale(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<SaleResponse>> getAllSales() {
+        return ResponseEntity.ok(saleService.getAllSales());
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<SaleResponse> getSaleById(@PathVariable Long id) {
+        return ResponseEntity.ok(saleService.getSaleById(id));
     }
 }
