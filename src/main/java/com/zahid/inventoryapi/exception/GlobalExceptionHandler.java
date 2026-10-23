@@ -12,6 +12,7 @@ import com.zahid.inventoryapi.sale.SaleNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.InsufficientAuthenticationException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.FieldError;
@@ -174,5 +175,16 @@ public class GlobalExceptionHandler {
                                 "Se requiere un token válido en la cabecera Authorization",
                                 request.getRequestURI());
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error);
+        }
+
+        @ExceptionHandler(AccessDeniedException.class)
+        public ResponseEntity<ErrorResponse> handleAccessDenied(
+                        AccessDeniedException ex, HttpServletRequest request) {
+                ErrorResponse error = ErrorResponse.of(
+                                HttpStatus.FORBIDDEN.value(),
+                                HttpStatus.FORBIDDEN.getReasonPhrase(),
+                                "No tienes permisos para realizar esta operación",
+                                request.getRequestURI());
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body(error);
         }
 }

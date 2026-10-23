@@ -2,6 +2,7 @@ package com.zahid.inventoryapi.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -20,13 +21,16 @@ public class SecurityConfig {
     private final JwtService jwtService;
     private final UserDetailsService userDetailsService;
     private final RestAuthenticationEntryPoint authenticationEntryPoint;
+    private final RestAccessDeniedHandler accessDeniedHandler;
 
     public SecurityConfig(JwtService jwtService,
             UserDetailsService userDetailsService,
-            RestAuthenticationEntryPoint authenticationEntryPoint) {
+            RestAuthenticationEntryPoint authenticationEntryPoint,
+            RestAccessDeniedHandler accessDeniedHandler) {
         this.jwtService = jwtService;
         this.userDetailsService = userDetailsService;
         this.authenticationEntryPoint = authenticationEntryPoint;
+        this.accessDeniedHandler = accessDeniedHandler;
     }
 
     @Bean
@@ -36,10 +40,32 @@ public class SecurityConfig {
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/error").permitAll()
-                        .requestMatchers("/api/auth/**").permitAll()
-                        .anyRequest().authenticated())
-                .exceptionHandling(ex -> ex.authenticationEntryPoint(authenticationEntryPoint))
+                        .requestMatchers("/error", "/api/auth/**").permitAll()
+
+                        // Productos
+                        .requestMatchers(HttpMethod.GET, "/api/products/**").hasAnyRole("ADMIN", "VENDEDOR")
+                        .requestMatchers(HttpMethod.POST, "/api/products").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/products/**").hasRole("ADMIN")
+
+                        // Categorías
+                        .requestMatchers(HttpMethod.GET, "/api/categories/**").hasAnyRole("ADMIN", "VENDEDOR")
+                        .requestMatchers(HttpMethod.POST, "/api/categories").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/categories/**").hasRole("ADMIN")
+
+                        // Inventario: solo ADMIN, incluido el historial
+                        .requestMatchers("/api/inventory-movements/**").hasRole("ADMIN")
+
+                        // Ventas
+                        .requestMatchers(HttpMethod.GET, "/api/sales/**").hasAnyRole("ADMIN", "VENDEDOR")
+                        .requestMatchers(HttpMethod.POST, "/api/sales").hasAnyRole("ADMIN", "VENDEDOR")
+
+                        // Usuarios
+                        .requestMatchers("/api/users/**").hasRole("ADMIN")
+
+                        .anyRequest().denyAll())
+                .exceptionHandling(ex -> ex
+                        .authenticationEntryPoint(authenticationEntryPoint)
+                        .accessDeniedHandler(accessDeniedHandler))
                 .addFilterBefore(
                         new JwtAuthenticationFilter(jwtService, userDetailsService),
                         UsernamePasswordAuthenticationFilter.class);
