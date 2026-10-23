@@ -8,7 +8,10 @@ import com.zahid.inventoryapi.inventory.InsufficientStockException;
 import com.zahid.inventoryapi.inventory.InvalidMovementQuantityException;
 import com.zahid.inventoryapi.product.ProductNotFoundException;
 import com.zahid.inventoryapi.sale.SaleNotFoundException;
-
+import com.zahid.inventoryapi.user.DuplicateEmailException;
+import com.zahid.inventoryapi.user.RoleNotFoundException;
+import com.zahid.inventoryapi.user.UserNotFoundException;
+import com.zahid.inventoryapi.user.UserOperationNotAllowedException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -186,5 +189,25 @@ public class GlobalExceptionHandler {
                                 "No tienes permisos para realizar esta operación",
                                 request.getRequestURI());
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).body(error);
+        }
+
+        @ExceptionHandler({ UserNotFoundException.class, RoleNotFoundException.class })
+        public ResponseEntity<ErrorResponse> handleUserModuleNotFound(RuntimeException ex, HttpServletRequest request) {
+                ErrorResponse error = ErrorResponse.of(
+                                HttpStatus.NOT_FOUND.value(),
+                                HttpStatus.NOT_FOUND.getReasonPhrase(),
+                                ex.getMessage(),
+                                request.getRequestURI());
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+        }
+
+        @ExceptionHandler({ DuplicateEmailException.class, UserOperationNotAllowedException.class })
+        public ResponseEntity<ErrorResponse> handleUserModuleConflict(RuntimeException ex, HttpServletRequest request) {
+                ErrorResponse error = ErrorResponse.of(
+                                HttpStatus.CONFLICT.value(),
+                                HttpStatus.CONFLICT.getReasonPhrase(),
+                                ex.getMessage(),
+                                request.getRequestURI());
+                return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
         }
 }
