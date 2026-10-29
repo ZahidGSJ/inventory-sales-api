@@ -1,2 +1,20 @@
 /mvnw text eol=lf
 *.cmd text eol=crlf
+
+* text=auto
+
+*.java text eol=lf
+*.xml text eol=lf
+*.sql text eol=lf
+*.properties text eol=lf
+*.yml text eol=lf
+*.md text eol=lf
+Dockerfile text eol=lf
+.dockerignore text eol=lf
+.env.example text eol=lf
+
+*.png binary
+*.jar binary
+
+.gitattributes text eol=lf
+.gitignore text eol=lf
