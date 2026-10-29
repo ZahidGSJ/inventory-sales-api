@@ -41,25 +41,21 @@ public class SecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/error", "/api/auth/**").permitAll()
+                        .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
 
-                        // Productos
                         .requestMatchers(HttpMethod.GET, "/api/products/**").hasAnyRole("ADMIN", "VENDEDOR")
                         .requestMatchers(HttpMethod.POST, "/api/products").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/api/products/**").hasRole("ADMIN")
 
-                        // Categorías
                         .requestMatchers(HttpMethod.GET, "/api/categories/**").hasAnyRole("ADMIN", "VENDEDOR")
                         .requestMatchers(HttpMethod.POST, "/api/categories").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/api/categories/**").hasRole("ADMIN")
 
-                        // Inventario: solo ADMIN, incluido el historial
                         .requestMatchers("/api/inventory-movements/**").hasRole("ADMIN")
 
-                        // Ventas
                         .requestMatchers(HttpMethod.GET, "/api/sales/**").hasAnyRole("ADMIN", "VENDEDOR")
                         .requestMatchers(HttpMethod.POST, "/api/sales").hasAnyRole("ADMIN", "VENDEDOR")
 
-                        // Usuarios
                         .requestMatchers("/api/users/**").hasRole("ADMIN")
 
                         .anyRequest().denyAll())
