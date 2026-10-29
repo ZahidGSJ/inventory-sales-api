@@ -1,12 +1,14 @@
 package com.zahid.inventoryapi.auth;
 
-import com.zahid.inventoryapi.security.JwtService;
+import java.util.Locale;
+
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
-import java.util.Locale;
+
+import com.zahid.inventoryapi.security.JwtService;
 
 @Service
 public class AuthService {

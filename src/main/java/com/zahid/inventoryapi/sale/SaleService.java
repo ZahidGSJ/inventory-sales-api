@@ -6,7 +6,10 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.zahid.inventoryapi.inventory.InsufficientStockException;
 import com.zahid.inventoryapi.inventory.InventoryMovementRequest;
 import com.zahid.inventoryapi.inventory.InventoryMovementService;
@@ -15,7 +18,6 @@ import com.zahid.inventoryapi.product.InactiveProductException;
 import com.zahid.inventoryapi.product.Product;
 import com.zahid.inventoryapi.product.ProductNotFoundException;
 import com.zahid.inventoryapi.product.ProductRepository;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class SaleService {

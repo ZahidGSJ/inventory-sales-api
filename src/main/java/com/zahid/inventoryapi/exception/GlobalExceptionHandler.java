@@ -1,18 +1,9 @@
 package com.zahid.inventoryapi.exception;
 
-import com.zahid.inventoryapi.category.CategoryNotFoundException;
-import com.zahid.inventoryapi.product.DuplicateSkuException;
-import com.zahid.inventoryapi.product.InactiveProductException;
-import com.zahid.inventoryapi.category.DuplicateCategoryNameException;
-import com.zahid.inventoryapi.inventory.InsufficientStockException;
-import com.zahid.inventoryapi.inventory.InvalidMovementQuantityException;
-import com.zahid.inventoryapi.product.ProductNotFoundException;
-import com.zahid.inventoryapi.sale.SaleNotFoundException;
-import com.zahid.inventoryapi.user.DuplicateEmailException;
-import com.zahid.inventoryapi.user.RoleNotFoundException;
-import com.zahid.inventoryapi.user.UserNotFoundException;
-import com.zahid.inventoryapi.user.UserOperationNotAllowedException;
-import jakarta.servlet.http.HttpServletRequest;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
@@ -23,9 +14,21 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
+
+import com.zahid.inventoryapi.category.CategoryNotFoundException;
+import com.zahid.inventoryapi.category.DuplicateCategoryNameException;
+import com.zahid.inventoryapi.inventory.InsufficientStockException;
+import com.zahid.inventoryapi.inventory.InvalidMovementQuantityException;
+import com.zahid.inventoryapi.product.DuplicateSkuException;
+import com.zahid.inventoryapi.product.InactiveProductException;
+import com.zahid.inventoryapi.product.ProductNotFoundException;
+import com.zahid.inventoryapi.sale.SaleNotFoundException;
+import com.zahid.inventoryapi.user.DuplicateEmailException;
+import com.zahid.inventoryapi.user.RoleNotFoundException;
+import com.zahid.inventoryapi.user.UserNotFoundException;
+import com.zahid.inventoryapi.user.UserOperationNotAllowedException;
+
+import jakarta.servlet.http.HttpServletRequest;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {

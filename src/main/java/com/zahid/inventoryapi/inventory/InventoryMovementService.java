@@ -1,11 +1,13 @@
 package com.zahid.inventoryapi.inventory;
 
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.zahid.inventoryapi.product.Product;
 import com.zahid.inventoryapi.product.ProductNotFoundException;
 import com.zahid.inventoryapi.product.ProductRepository;
-import java.util.List;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class InventoryMovementService {

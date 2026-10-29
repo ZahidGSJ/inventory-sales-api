@@ -1,10 +1,11 @@
 package com.zahid.inventoryapi.user;
 
+import java.util.List;
+import java.util.Locale;
+
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import java.util.List;
-import java.util.Locale;
 
 @Service
 public class UserService {

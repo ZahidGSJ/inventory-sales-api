@@ -1,10 +1,12 @@
 package com.zahid.inventoryapi.product;
 
 import java.util.List;
+
 import org.springframework.stereotype.Service;
+
+import com.zahid.inventoryapi.category.Category;
 import com.zahid.inventoryapi.category.CategoryNotFoundException;
 import com.zahid.inventoryapi.category.CategoryRepository;
-import com.zahid.inventoryapi.category.Category;
 
 @Service
 public class ProductService {

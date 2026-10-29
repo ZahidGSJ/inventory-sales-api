@@ -1,6 +1,7 @@
 package com.zahid.inventoryapi.category;
 
 import java.util.List;
+
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,7 +29,7 @@ public class CategoryService {
 
         return CategoryResponse.from(savedCategory);
     }
-    
+
     @Transactional(readOnly = true)
     public List<CategoryResponse> getAllCategories() {
         return categoryRepository.findAll(Sort.by("name"))
