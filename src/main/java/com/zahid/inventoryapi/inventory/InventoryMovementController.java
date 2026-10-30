@@ -55,8 +55,8 @@ public class InventoryMovementController {
     @GetMapping("/product/{productId}")
     @Operation(summary = "Consultar el historial de un producto", description = """
             Devuelve los movimientos registrados para el producto, incluidas las salidas
-            generadas por ventas. Si el producto existe pero no tiene movimientos,
-            devuelve una lista vacía.
+            generadas por ventas, del más reciente al más antiguo. Si el producto existe
+            pero no tiene movimientos, devuelve una lista vacía.
             """)
     @ApiResponse(responseCode = "404", description = "No existe un producto con ese identificador.")
     public ResponseEntity<List<InventoryMovementResponse>> getMovementsByProduct(

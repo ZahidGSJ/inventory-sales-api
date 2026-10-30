@@ -71,7 +71,7 @@ public class InventoryMovementService {
                 .orElseThrow(() -> new ProductNotFoundException(
                         "Producto no encontrado con id: " + productId));
 
-        return movementRepository.findByProductId(productId)
+        return movementRepository.findByProductIdOrderByCreatedAtDescIdDesc(productId)
                 .stream()
                 .map(InventoryMovementResponse::from)
                 .toList();
