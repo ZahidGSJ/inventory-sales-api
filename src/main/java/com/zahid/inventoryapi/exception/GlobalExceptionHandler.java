@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.InsufficientAuthenticationException;
 import org.springframework.security.core.AuthenticationException;
@@ -212,5 +213,16 @@ public class GlobalExceptionHandler {
                                 ex.getMessage(),
                                 request.getRequestURI());
                 return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
+        }
+
+        @ExceptionHandler(HttpMessageNotReadableException.class)
+        public ResponseEntity<ErrorResponse> handleUnreadableBody(
+                        HttpMessageNotReadableException ex, HttpServletRequest request) {
+                ErrorResponse error = ErrorResponse.of(
+                                HttpStatus.BAD_REQUEST.value(),
+                                HttpStatus.BAD_REQUEST.getReasonPhrase(),
+                                "El cuerpo de la petición falta, no es un JSON válido o contiene valores no permitidos",
+                                request.getRequestURI());
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
         }
 }
