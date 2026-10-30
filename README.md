@@ -99,7 +99,7 @@ The source of truth for permissions is `SecurityConfig`; the interactive documen
 - **Consistent error contract.** A global exception handler maps business errors to a single `ErrorResponse` format with the right status code (400, 401, 403, 404, 409).
 - **N+1 queries measured and fixed.** Listing sales went from 1 + N queries to one, using an entity graph.
 - **Self-protection rules.** An administrator cannot deactivate their own account or change their own role, and at least one active administrator must always remain.
-  - **Uniqueness enforced by the database.** Category names and product SKUs are unique regardless of letter case, guaranteed by functional unique indexes; the service-level check only provides a clear error message.
+- **Uniqueness enforced by the database.** Category names and product SKUs are unique regardless of letter case, guaranteed by functional unique indexes; the service-level check only provides a clear error message.
 
 ## Project structure
 
