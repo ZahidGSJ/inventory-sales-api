@@ -34,7 +34,7 @@ class CategoryServiceTest {
 
     @Test
     void crearCategoriaConNombreDuplicado_lanzaExcepcionYNoGuarda() {
-        when(categoryRepository.existsByName("Accesorios")).thenReturn(true);
+        when(categoryRepository.existsByNameIgnoreCase("Accesorios")).thenReturn(true);
 
         assertThatThrownBy(() -> service.createCategory(new CategoryRequest("Accesorios", "x")))
                 .isInstanceOf(DuplicateCategoryNameException.class);
@@ -46,7 +46,7 @@ class CategoryServiceTest {
     void actualizarCategoria_cambiaNombreYDescripcion() {
         Category existing = category(1L, "Electrónica", "Descripción vieja");
         when(categoryRepository.findById(1L)).thenReturn(Optional.of(existing));
-        when(categoryRepository.existsByNameAndIdNot("Computadoras", 1L)).thenReturn(false);
+        when(categoryRepository.existsByNameIgnoreCaseAndIdNot("Computadoras", 1L)).thenReturn(false);
         when(categoryRepository.save(any(Category.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
         CategoryResponse response = service.updateCategory(1L,
@@ -60,7 +60,7 @@ class CategoryServiceTest {
     void actualizarCategoria_conElNombreDeOtraCategoria_lanzaExcepcionYNoModificaNada() {
         Category existing = category(1L, "Electrónica", "Descripción");
         when(categoryRepository.findById(1L)).thenReturn(Optional.of(existing));
-        when(categoryRepository.existsByNameAndIdNot("Accesorios", 1L)).thenReturn(true);
+        when(categoryRepository.existsByNameIgnoreCaseAndIdNot("Accesorios", 1L)).thenReturn(true);
 
         assertThatThrownBy(() -> service.updateCategory(1L, new CategoryRequest("Accesorios", "Otra")))
                 .isInstanceOf(DuplicateCategoryNameException.class);

@@ -31,7 +31,7 @@ public class CategoryController {
     @PostMapping
     @Operation(summary = "Crear una categoría", description = "Registra una categoría con un nombre único.")
     @ApiResponse(responseCode = "201", description = "Categoría creada.")
-    @ApiResponse(responseCode = "409", description = "Ya existe una categoría con ese nombre.")
+    @ApiResponse(responseCode = "409", description = "Ya existe una categoría con ese nombre, sin distinguir mayúsculas.")
     public ResponseEntity<CategoryResponse> createCategory(@Valid @RequestBody CategoryRequest request) {
         CategoryResponse response = categoryService.createCategory(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);

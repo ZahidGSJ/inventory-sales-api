@@ -36,7 +36,7 @@ public class ProductController {
             """)
     @ApiResponse(responseCode = "201", description = "Producto creado.")
     @ApiResponse(responseCode = "404", description = "La categoría indicada no existe.")
-    @ApiResponse(responseCode = "409", description = "Ya existe un producto con ese SKU.")
+    @ApiResponse(responseCode = "409", description = "Ya existe un producto con ese SKU, sin distinguir mayúsculas.")
     public ResponseEntity<ProductResponse> createProduct(@Valid @RequestBody ProductRequest request) {
         ProductResponse response = productService.createProduct(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);

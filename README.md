@@ -99,6 +99,7 @@ The source of truth for permissions is `SecurityConfig`; the interactive documen
 - **Consistent error contract.** A global exception handler maps business errors to a single `ErrorResponse` format with the right status code (400, 401, 403, 404, 409).
 - **N+1 queries measured and fixed.** Listing sales went from 1 + N queries to one, using an entity graph.
 - **Self-protection rules.** An administrator cannot deactivate their own account or change their own role, and at least one active administrator must always remain.
+  - **Uniqueness enforced by the database.** Category names and product SKUs are unique regardless of letter case, guaranteed by functional unique indexes; the service-level check only provides a clear error message.
 
 ## Project structure
 
@@ -120,7 +121,6 @@ src/test                          unit and integration tests
 ## Known limitations and roadmap
 
 - Tokens issued before a password reset stay valid until they expire (15 minutes by default); token revocation and refresh tokens are not implemented yet.
-- Name and SKU uniqueness is case-sensitive; a case-insensitive unique index is planned as a new migration.
 - API messages and documentation are in Spanish; internationalization is planned.
 - Suppliers and a statistics dashboard are not implemented yet.
 - Multi-branch support (stock per location) is a planned extension.

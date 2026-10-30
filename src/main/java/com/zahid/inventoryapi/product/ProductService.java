@@ -20,8 +20,10 @@ public class ProductService {
     }
 
     public ProductResponse createProduct(ProductRequest request) {
-        if (productRepository.existsBySku(request.sku())) {
-            throw new DuplicateSkuException("Ya existe un producto con el SKU: " + request.sku());
+        String sku = request.sku().trim();
+
+        if (productRepository.existsBySkuIgnoreCase(sku)) {
+            throw new DuplicateSkuException("Ya existe un producto con el SKU: " + sku);
         }
 
         Category category = categoryRepository.findById(request.categoryId())
@@ -29,8 +31,8 @@ public class ProductService {
                         "Categoría no encontrada con id: " + request.categoryId()));
 
         Product product = new Product();
-        product.setSku(request.sku());
-        product.setName(request.name());
+        product.setSku(sku);
+        product.setName(request.name().trim());
         product.setDescription(request.description());
         product.setPrice(request.price());
         product.setMinimumStock(request.minimumStock());

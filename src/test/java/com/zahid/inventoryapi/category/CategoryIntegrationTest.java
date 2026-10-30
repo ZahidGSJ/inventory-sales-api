@@ -1,11 +1,14 @@
 package com.zahid.inventoryapi.category;
 
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.hamcrest.Matchers.containsString;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.MediaType;
 
 import com.zahid.inventoryapi.support.AbstractIntegrationTest;
@@ -41,5 +44,28 @@ class CategoryIntegrationTest extends AbstractIntegrationTest {
                                                 """))
                                 .andExpect(status().isOk())
                                 .andExpect(jsonPath("$.description").value("Descripción nueva"));
+        }
+
+        @Test
+        void unNombreQueSoloDifiereEnMayusculas_devuelve409() throws Exception {
+                String admin = adminToken();
+                createCategory(admin, "Accesorios");
+
+                mockMvc.perform(post("/api/categories")
+                                .header(AUTH_HEADER, bearer(admin))
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content("""
+                                                {"name": " ACCESORIOS ", "description": "x"}
+                                                """))
+                                .andExpect(status().isConflict());
+        }
+
+        @Test
+        void laBaseDeDatosRechazaNombresQueSoloDifierenEnMayusculas() {
+                jdbcTemplate.update("INSERT INTO categories (name) VALUES (?)", "Accesorios");
+
+                assertThatThrownBy(() -> jdbcTemplate.update("INSERT INTO categories (name) VALUES (?)", "ACCESORIOS"))
+                                .isInstanceOf(DataIntegrityViolationException.class)
+                                .hasMessageContaining("uk_categories_name_lower");
         }
 }

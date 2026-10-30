@@ -15,19 +15,19 @@ public class CategoryService {
         this.categoryRepository = categoryRepository;
     }
 
+    @Transactional
     public CategoryResponse createCategory(CategoryRequest request) {
-        if (categoryRepository.existsByName(request.name())) {
-            throw new DuplicateCategoryNameException("Ya existe una categoria con el nombre: " + request.name());
+        String name = request.name().trim();
+
+        if (categoryRepository.existsByNameIgnoreCase(name)) {
+            throw new DuplicateCategoryNameException("Ya existe una categoria con el nombre: " + name);
         }
 
         Category category = new Category();
-
-        category.setName(request.name());
+        category.setName(name);
         category.setDescription(request.description());
 
-        Category savedCategory = categoryRepository.save(category);
-
-        return CategoryResponse.from(savedCategory);
+        return CategoryResponse.from(categoryRepository.save(category));
     }
 
     @Transactional(readOnly = true)
@@ -46,13 +46,13 @@ public class CategoryService {
     @Transactional
     public CategoryResponse updateCategory(Long id, CategoryRequest request) {
         Category category = findCategory(id);
+        String name = request.name().trim();
 
-        if (categoryRepository.existsByNameAndIdNot(request.name(), id)) {
-            throw new DuplicateCategoryNameException(
-                    "Ya existe una categoria con el nombre: " + request.name());
+        if (categoryRepository.existsByNameIgnoreCaseAndIdNot(name, id)) {
+            throw new DuplicateCategoryNameException("Ya existe una categoría con el nombre: " + name);
         }
 
-        category.setName(request.name());
+        category.setName(name);
         category.setDescription(request.description());
 
         return CategoryResponse.from(categoryRepository.save(category));
